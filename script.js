@@ -17,7 +17,7 @@ function divide(a, b){
     return 'ERROR!';
 }
 
-function operator(op, num1, num2){
+function operate(op, num1, num2){
     switch(op){
         case '+':
             return add(num1, num2);
@@ -32,8 +32,15 @@ function operator(op, num1, num2){
 
 const display = document.querySelector(".display");
 const numButtons = document.querySelectorAll(".num");
+const operatorButtons = document.querySelectorAll(".op");
 const clearButton = document.querySelector('.clear');
 const deleteButton = document.querySelector('.delete');
+const egal = document.querySelector(".egal");
+const point = document.querySelector(".point")
+const operators = ['/','*','-','+'];
+let inFloat = false;
+let floatN = 0;
+let displayValue;
 
 clearButton.addEventListener('click', ()=>{
     display.textContent = '';
@@ -44,9 +51,67 @@ deleteButton.addEventListener('click', ()=>{
     display.textContent = display.textContent.slice(0,-1)
 })
 
+point.addEventListener('click', () => {
+    if(display.textContent == ''){
+        display.textContent = '0.';
+        inFloat = true;
+    }
+    else if(!operators.includes(display.textContent.slice(-1))){
+        display.textContent += '.';
+        inFloat = true;
+    }
+})
+
 numButtons.forEach((button) => {
     button.addEventListener('click',()=>{
-        display.textContent += button.textContent;
+        if(floatN == 0){
+        if(operators.includes(display.textContent.slice(-1)))
+            display.textContent +=  " " + button.textContent;
+        else display.textContent += button.textContent;
+        displayValue = display.textContent;
+        if(inFloat == true){
+            floatN++;
+        }
+        }
+    })  
+})
+
+operatorButtons.forEach((op)=>{
+    op.addEventListener('click',()=>{
+        if(display.textContent == ''){
+            display.textContent += '0';
+        }
+        if(!operators.includes(display.textContent.slice(-1))){
+            display.textContent += " " + op.textContent;
+            inFloat = false;
+            floatN = 0;
+        }
+        else{
+            display.textContent = display.textContent.slice(0,-1) + op.textContent;
+            inFloat = false;
+            floatN = 0;
+        }
+        displayValue = display.textContent;
     })
-    
+})
+
+egal.addEventListener("click", () => {
+    console.log(displayValue);
+    let numsOps = displayValue.split(" ")
+
+    let finalValue = 0;
+    finalValue = operate(numsOps[1],parseFloat(numsOps[0]),parseFloat(numsOps[2]));
+    numsOps.shift();
+    numsOps.shift();
+    numsOps.shift();
+
+    while(numsOps.length != 0){
+        console.log("sunt aici")
+        finalValue = operate(numsOps[0], finalValue, parseFloat(numsOps[1]));
+        numsOps.shift();
+        numsOps.shift();
+    }
+
+    display.textContent = finalValue.toString();
+
 })
