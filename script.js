@@ -44,6 +44,7 @@ let displayValue;
 
 clearButton.addEventListener('click', ()=>{
     display.textContent = '';
+    displayValue = 0;
 }
 )
 
@@ -99,8 +100,23 @@ egal.addEventListener("click", () => {
     console.log(displayValue);
     let numsOps = displayValue.split(" ")
 
+    if(numsOps.length == 1){
+        return;
+    }
+
+    if(numsOps.length !=0 && numsOps.length % 2 == 0 ){
+        display.textContent = 'ERROR!';
+        return;
+    }
+
     let finalValue = 0;
     finalValue = operate(numsOps[1],parseFloat(numsOps[0]),parseFloat(numsOps[2]));
+
+    if(finalValue == 'ERROR!'){
+        display.textContent = finalValue;
+        return;
+    }
+
     numsOps.shift();
     numsOps.shift();
     numsOps.shift();
@@ -108,9 +124,17 @@ egal.addEventListener("click", () => {
     while(numsOps.length != 0){
         console.log("sunt aici")
         finalValue = operate(numsOps[0], finalValue, parseFloat(numsOps[1]));
+
+        if(finalValue == 'ERROR!'){
+            display.textContent = finalValue;
+            return;
+        }
+
         numsOps.shift();
         numsOps.shift();
     }
+
+    finalValue = Math.round(finalValue*100)/100;
 
     display.textContent = finalValue.toString();
 
