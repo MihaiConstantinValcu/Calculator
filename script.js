@@ -31,6 +31,7 @@ function operate(op, num1, num2){
 }
 
 const display = document.querySelector(".display");
+const allButtons = document.querySelectorAll(".button");
 const numButtons = document.querySelectorAll(".num");
 const operatorButtons = document.querySelectorAll(".op");
 const clearButton = document.querySelector('.clear');
@@ -41,6 +42,14 @@ const operators = ['/','*','-','+'];
 let inFloat = false;
 let floatN = 0;
 let displayValue;
+
+allButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        if(display.textContent == 'ERROR!'){
+            display.textContent = '';
+        }
+    })
+})
 
 clearButton.addEventListener('click', ()=>{
     display.textContent = '';
